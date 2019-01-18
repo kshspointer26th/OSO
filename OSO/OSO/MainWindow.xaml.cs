@@ -28,6 +28,8 @@ namespace OSO
         int day;
         private static DateTime stDate = DateTime.Now;
 
+        class NoInfoException : Exception { }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
 
@@ -63,6 +65,7 @@ namespace OSO
             int m = dateTime.Month;
             int d = dateTime.Day;
             string[] aa = mealAPI.getMealOfDay(y, m, d).Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+            if (aa[0] != "[조식]") throw new NoInfoException();
             bool xx = false;
             aa = Tools.RemoveIndex(aa, 0);
             aa = Tools.RemoveIndex(aa, 1);
@@ -234,6 +237,10 @@ namespace OSO
             {
                 await getMeal(stDate);
             }
+            catch (NoInfoException eex)
+            {
+                System.Windows.MessageBox.Show("급식 정보를 불러올 수 없습니다.");
+            }
             catch (Exception ex)
             {
                 System.Windows.MessageBox.Show("프로그램에 일시적 오류가 발생하였습니다. 문제가 반복되면 보고하십시오.");
@@ -242,12 +249,18 @@ namespace OSO
 
         private void programInformation_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.MessageBox.Show("26기 남정연, 이융희, 이현겸, 신원영");
+            MessageBox.Show("OSO는 강원과학고등학교 학생들을 위한 급식 정보 제공 프로그램입니다." +
+               ".Net 기반의 C# 언어로 강원과학고등학교 26기 POINTER Team Alpha에 의해 개발되었습니다." +
+               "소스코드는 https://github.com/kshspointer26th/OSO 에 Apache-2.0 라이선스로 배포되고 있습니다." +
+               "문제가 있다면 강원과학고등학교 POINTER에 문의하여 주십시오." + Environment.NewLine +
+               "개발자 : 남정연, 이융희" + Environment.NewLine +
+               "디자인 : 이현겸" + Environment.NewLine +
+               "기타 보조 : 신원영", "OSO Credit", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void checkForUpdates_Click(object sender, RoutedEventArgs e)
         {
-
+           
         }
 
         private async void nextDay_Click(object sender, RoutedEventArgs e)
@@ -256,7 +269,12 @@ namespace OSO
             try
             {
                 await getMeal(stDate);
-            } catch (Exception ex)
+            }
+            catch (NoInfoException eex)
+            {
+                System.Windows.MessageBox.Show("급식 정보를 불러올 수 없습니다.");
+            }
+            catch (Exception ex)
             {
                 System.Windows.MessageBox.Show("프로그램에 일시적 오류가 발생하였습니다. 문제가 반복되면 보고하십시오.");
             }
@@ -269,6 +287,10 @@ namespace OSO
             try
             {
                 await getMeal(stDate);
+            }
+            catch (NoInfoException eex)
+            {
+                System.Windows.MessageBox.Show("급식 정보를 불러올 수 없습니다.");
             }
             catch (Exception ex)
             {
