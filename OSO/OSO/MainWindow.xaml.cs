@@ -285,7 +285,10 @@ namespace OSO
 
         private void exitButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            if (MessageBox.Show("종료하시겠습니까?", "OSO", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                this.Close();
+            }
         }
     }
 }
