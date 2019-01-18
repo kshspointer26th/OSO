@@ -240,11 +240,6 @@ namespace OSO
             };
         }
 
-        private void selectDate_Click(object sender, RoutedEventArgs e)
-        {
-            this.pickDate.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
-        }
-
         private void programInformation_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.MessageBox.Show("26기 남정연, 이융희, 이현겸, 신원영");
