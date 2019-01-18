@@ -9,26 +9,27 @@
         WindowStartupLocation="Manual" 
         ResizeMode="NoResize"
         Top="0"
+        Background="Transparent"
         Loaded="Window_Loaded">
     <Grid
-        x:Name="RootLayout" Margin="0,0,0,153">
+        x:Name="RootLayout" Margin="0,0,0,153" Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="0*"/>
         </Grid.RowDefinitions>
 
-        <Grid x:Name="StatusWrapper" Panel.ZIndex="1" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="500" MouseDown="Window_MouseDown" Background="Transparent">
+        <Grid x:Name="StatusWrapper" Panel.ZIndex="1" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="500" MouseDown="Window_MouseDown" Background="White">
             <Label x:Name="dateText" Content="[2019년 1월 18일 급식표 표시중]" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="216"/>
             <TextBlock x:Name="beforeDay" Text="&lt; 이전날" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="84" Height="16"/>
             <Label x:Name="timeText" Content="배식까지 남은 시간 : 12시간 32분 21초 " HorizontalAlignment="Left" Margin="231,10,0,0" VerticalAlignment="Top" Width="259" HorizontalContentAlignment="Right" />
-            <TextBlock x:Name="nextDay" Text="다음날 &gt;" HorizontalAlignment="Left" Margin="442,41,0,0" VerticalAlignment="Top" Width="48"/>
-            <TextBlock x:Name="adjustTransparency" Text="투명도 조절" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top" Width="67" Height="17"/>
-            <TextBlock x:Name="selectDate" HorizontalAlignment="Center" Margin="226,41,221,43" Width="53"><Run Text="날짜 선택"/><LineBreak/><Run/></TextBlock>
-            <TextBlock x:Name="checkForUpdates" Text="업데이트 확인" HorizontalAlignment="Left" Margin="82,66,0,0" VerticalAlignment="Top" Width="77" Height="19"/>
-            <TextBlock x:Name="programInformation" Text="프로그램 정보" HorizontalAlignment="Left" Margin="164,66,0,0" VerticalAlignment="Top" Width="77" Height="19"/>
+            <TextBlock Panel.ZIndex="2" x:Name="nextDay" Text="다음날 &gt;" HorizontalAlignment="Left" Margin="442,41,0,0" VerticalAlignment="Top" Width="48"/>
+            <Button Panel.ZIndex="2" x:Name="adjustTransparency" Content="투명도 조절" Background="Transparent" BorderThickness="0" Click="adjustTransparency_Click" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top" Width="67" Height="17"/>
+            <TextBlock Panel.ZIndex="2" x:Name="selectDate" HorizontalAlignment="Center" Margin="226,41,221,43" Width="53"><Run Text="날짜 선택"/><LineBreak/><Run/></TextBlock>
+            <TextBlock Panel.ZIndex="2" x:Name="checkForUpdates" Text="업데이트 확인" HorizontalAlignment="Left" Margin="82,66,0,0" VerticalAlignment="Top" Width="77" Height="19"/>
+            <TextBlock Panel.ZIndex="2" x:Name="programInformation" Text="프로그램 정보" HorizontalAlignment="Left" Margin="164,66,0,0" VerticalAlignment="Top" Width="77" Height="19"/>
         </Grid>
 
-        <Grid x:Name="wrapper" Height="521" VerticalAlignment="Top" Margin="0,0,0,-87" Grid.RowSpan="2">
+        <Grid x:Name="wrapper" Opacity="0.7" Background="white" Height="521" VerticalAlignment="Top" Margin="0,0,0,-87" Grid.RowSpan="2" IsHitTestVisible="False">
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*"/>
                 <RowDefinition Height="587*"/>
@@ -38,7 +39,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <ListView x:Name="mealList" Margin="0,96,0,-67" Grid.ColumnSpan="2" Grid.Row="1">
+            <ListView x:Name="mealList" Background="Transparent" Margin="0,96,0,-67" BorderThickness="0" Grid.ColumnSpan="2" Grid.Row="1">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="Background" Value="Transparent" />

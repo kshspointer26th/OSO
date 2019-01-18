@@ -297,5 +297,12 @@ namespace OSO
         {
             System.Windows.MessageBox.Show("26기 남정연, 이융희, 이현겸, 신원영");
         }
+
+        private void adjustTransparency_Click(object sender, RoutedEventArgs e)
+        {
+            var transparencyAdjustDialog = new TransparencyAdjustDialog();
+            transparencyAdjustDialog.Owner = Window.GetWindow(this);
+            transparencyAdjustDialog.Show();
+        }
     }
 }
