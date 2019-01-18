@@ -64,13 +64,18 @@ namespace OSO
             int y = dateTime.Year;
             int m = dateTime.Month;
             int d = dateTime.Day;
-            string[] aa = mealAPI.getMealOfDay(y, m, d).Split(new[] { Environment.NewLine }, StringSplitOptions.None);
-            if (aa[0] != "[조식]") throw new NoInfoException();
+            this.dateText.Content = String.Format("[{0}년 {1}월 {2}일 급식표 표시중]", y, m, d);
+            this.mealList.Items.Clear();
+            string result = mealAPI.getMealOfDay(y, m, d);
+            if (result == String.Empty)
+            {
+                throw new NoInfoException();
+            }
+            string[] aa = result.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
             bool xx = false;
             aa = Tools.RemoveIndex(aa, 0);
             aa = Tools.RemoveIndex(aa, 1);
             aa = Tools.RemoveIndex(aa, 2);
-            this.mealList.Items.Clear();
             foreach (string a in aa)
             {
                 if (a.Contains("[") && xx)
@@ -81,8 +86,6 @@ namespace OSO
 
                 this.mealList.Items.Add(a);
             }
-
-            this.dateText.Content = String.Format("[{0}년 {1}월 {2}일 급식표 표시중]", y, m, d);
         }
 
         private async void dispatcherTimer_Tick(object sender, EventArgs e)
