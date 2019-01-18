@@ -263,7 +263,7 @@ namespace OSO
 
         private void checkForUpdates_Click(object sender, RoutedEventArgs e)
         {
-           
+            System.Windows.MessageBox.Show("이 기능은 아직 지원하지 않습니다.");
         }
 
         private async void nextDay_Click(object sender, RoutedEventArgs e)
