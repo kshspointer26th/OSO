@@ -5,14 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OSO"
         mc:Ignorable="d"
-        Title="OSO" Topmost="False"  ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None" Height="587" Width="500"
+        Title="OSO" Topmost="False"  ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None" Height="644" Width="500"
         WindowStartupLocation="Manual" 
         ResizeMode="NoResize"
         Top="0"
         Background="Transparent"
         Loaded="Window_Loaded">
     <Grid
-        x:Name="RootLayout" Margin="0,0,0,153" Background="Transparent">
+        x:Name="RootLayout" Background="Transparent">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="0*"/>
@@ -20,16 +20,20 @@
 
         <Grid x:Name="StatusWrapper" Panel.ZIndex="1" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="500" MouseDown="Window_MouseDown" Background="White">
             <Label x:Name="dateText" Content="[2019년 1월 18일 급식표 표시중]" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="216"/>
-            <TextBlock x:Name="beforeDay" Text="&lt; 이전날" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="84" Height="16"/>
+            <Button x:Name="beforeDay" Content="&lt; 이전날" Click="beforeDay_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="52" Height="16"/>
             <Label x:Name="timeText" Content="배식까지 남은 시간 : 12시간 32분 21초 " HorizontalAlignment="Left" Margin="231,10,0,0" VerticalAlignment="Top" Width="259" HorizontalContentAlignment="Right" />
-            <TextBlock Panel.ZIndex="2" x:Name="nextDay" Text="다음날 &gt;" HorizontalAlignment="Left" Margin="442,41,0,0" VerticalAlignment="Top" Width="48"/>
-            <Button Panel.ZIndex="2" x:Name="adjustTransparency" Content="투명도 조절" Background="Transparent" BorderThickness="0" Click="adjustTransparency_Click" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top" Width="67" Height="17"/>
-            <TextBlock Panel.ZIndex="2" x:Name="selectDate" HorizontalAlignment="Center" Margin="226,41,221,43" Width="53"><Run Text="날짜 선택"/><LineBreak/><Run/></TextBlock>
-            <TextBlock Panel.ZIndex="2" x:Name="checkForUpdates" Text="업데이트 확인" HorizontalAlignment="Left" Margin="82,66,0,0" VerticalAlignment="Top" Width="77" Height="19"/>
-            <TextBlock Panel.ZIndex="2" x:Name="programInformation" Text="프로그램 정보" HorizontalAlignment="Left" Margin="164,66,0,0" VerticalAlignment="Top" Width="77" Height="19"/>
+            <Button Panel.ZIndex="2" x:Name="nextDay" Content="다음날 &gt;" Click="nextDay_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Margin="442,41,0,0" VerticalAlignment="Top" Width="48"/>
+            <Button Panel.ZIndex="2" x:Name="adjustTransparency" Content="투명도 조절" Background="Transparent" BorderThickness="0" Click="adjustTransparency_Click" HorizontalAlignment="Left" Margin="10,66,0,0" VerticalAlignment="Top" Width="67" Height="19"/>
+            <Button Panel.ZIndex="2" x:Name="checkForUpdates" Click="checkForUpdates_Click" Content="업데이트 확인" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Margin="82,66,0,0" VerticalAlignment="Top" Width="77" Height="19" RenderTransformOrigin="0.537,1.221"/>
+            <Button Panel.ZIndex="2" x:Name="programInformation" Click="programInformation_Click" Content="프로그램 정보" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Margin="164,66,0,0" VerticalAlignment="Top" Width="77" Height="19"/>
+            <Button Panel.ZIndex="2" x:Name="exitButton" Content="프로그램 종료" Click="exitButton_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Margin="413,66,0,0" VerticalAlignment="Top" Width="77" Height="19"/>
+            <Grid Margin="190,41" HorizontalAlignment="Center">
+                <Button Panel.ZIndex="2" x:Name="selectDate" Click="selectDate_Click" Content="날짜선택" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="54"/>
+                <Button Panel.ZIndex="2" x:Name="updateButton" Click="updateButton_Click"  Content="새로고침" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Margin="66,0,0,0" VerticalAlignment="Top" Width="54"/>
+            </Grid>
         </Grid>
 
-        <Grid x:Name="wrapper" Opacity="0.7" Background="white" Height="521" VerticalAlignment="Top" Margin="0,0,0,-87" Grid.RowSpan="2" IsHitTestVisible="False">
+        <Grid x:Name="wrapper" Opacity="0.7" Background="white" Height="544" VerticalAlignment="Top" Margin="0,100,0,0" IsHitTestVisible="False">
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*"/>
                 <RowDefinition Height="587*"/>
@@ -39,21 +43,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <ListView x:Name="mealList" Background="Transparent" Margin="0,96,0,-67" BorderThickness="0" Grid.ColumnSpan="2" Grid.Row="1">
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <Setter Property="Background" Value="Transparent" />
-                        <Setter Property="BorderBrush" Value="Transparent" />
-                        <Setter Property="BorderThickness" Value="0" />
-                        <Style.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter Property="Foreground" Value="Black" />
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </ListView.ItemContainerStyle>
-            </ListView>
-
+            <ListView x:Name="mealList" Background="Transparent" BorderThickness="0" Grid.ColumnSpan="2" Grid.RowSpan="2" />
         </Grid>
     </Grid>
 </Window>

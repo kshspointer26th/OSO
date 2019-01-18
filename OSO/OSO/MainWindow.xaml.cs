@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OSO.Properties;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -23,6 +24,7 @@ namespace OSO
     public partial class MainWindow : Window
     {
         int day;
+        private static DateTime stDate = DateTime.Now;
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
@@ -41,95 +43,58 @@ namespace OSO
             dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
             dispatcherTimer.Start();
 
-            getMeal();
-        }
+            day = stDate.Day;
 
-        private string[] removeIndex(string[] aa, int index)
-        {
-            List<string> tmp = new List<string>(aa);
-            tmp.RemoveAt(index);
-            return tmp.ToArray();
-        }
-
-        private async Task<int> getMeal(int y, int m, int d)
-        {
             try
             {
-                string[] aa = mealAPI.getMealOfDay(y, m, d).Split(new[] {Environment.NewLine}, StringSplitOptions.None);
-                bool xx = false;
-
-                aa = removeIndex(aa, 1);
-                aa = removeIndex(aa, 2);
-                this.mealList.Items.Clear();
-                foreach (string a in aa)
-                {
-                    if (a.Contains("[") && xx)
-                    {
-                        mealList.Items.Add("");
-                    }
-                    if (xx == false) xx = true;
-
-                    this.mealList.Items.Add(a);
-                }
-
-                day = getDay();
+                getMeal(stDate);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return -1;
+                System.Windows.MessageBox.Show("프로그램에 일시적 오류가 발생하였습니다. 문제가 반복되면 보고하십시오.");
             }
-            return 0;
         }
 
-        private async Task<int> getMeal()
+        private async Task getMeal(DateTime dateTime)
         {
-            try
+            int y = dateTime.Year;
+            int m = dateTime.Month;
+            int d = dateTime.Day;
+            string[] aa = mealAPI.getMealOfDay(y, m, d).Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+            bool xx = false;
+            aa = Tools.RemoveIndex(aa, 0);
+            aa = Tools.RemoveIndex(aa, 1);
+            aa = Tools.RemoveIndex(aa, 2);
+            this.mealList.Items.Clear();
+            foreach (string a in aa)
             {
-                string[] aa = mealAPI.getMealOfDay(getYear(), getMonth(), getDay()).Split(new[] {
-     Environment.NewLine
-    }, StringSplitOptions.None);
-                bool xx = false;
-
-                aa = removeIndex(aa, 1);
-                aa = removeIndex(aa, 2);
-                this.mealList.Items.Clear();
-                foreach (string a in aa)
+                if (a.Contains("[") && xx)
                 {
-                    if (a.Contains("[") && xx)
-                    {
-                        mealList.Items.Add("");
-                    }
-                    if (xx == false) xx = true;
-
-                    this.mealList.Items.Add(a);
+                    mealList.Items.Add("");
                 }
+                if (xx == false) xx = true;
 
-                day = getDay();
+                this.mealList.Items.Add(a);
             }
-            catch (Exception e)
-            {
-                return -1;
-            }
-            return 0;
+
+            this.dateText.Content = String.Format("[{0}년 {1}월 {2}일 급식표 표시중]", y, m, d);
         }
 
-        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        private async void dispatcherTimer_Tick(object sender, EventArgs e)
         {
-            if (day != getDay()) getMeal();
+            if (day != DateTime.Now.Day)
+            {
+                stDate = DateTime.Now;
+                try
+                {
+                    await getMeal(stDate);
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show("프로그램에 일시적 오류가 발생하였습니다. 문제가 반복되면 보고하십시오.");
+                }
+            }
             setTimeText();
-        }
-
-        public DateTime changeTime(DateTime dateTime, int hours, int minutes, int seconds, int milliseconds)
-        {
-            return new DateTime(
-             dateTime.Year,
-             dateTime.Month,
-             dateTime.Day,
-             hours,
-             minutes,
-             seconds,
-             milliseconds,
-             dateTime.Kind);
         }
 
         private void setTimeText()
@@ -137,31 +102,31 @@ namespace OSO
             var now = DateTime.Now;
             DateTime end = DateTime.Now;
 
-            var breakfast = changeTime(now, 7, 0, 0, 0);
-            var lunch = changeTime(now, 12, 20, 0, 0);
-            var dinner = changeTime(now, 18, 0, 0, 0);
+            var breakfast = Tools.ChangeTime(now, 7, 0, 0, 0);
+            var lunch = Tools.ChangeTime(now, 12, 20, 0, 0);
+            var dinner = Tools.ChangeTime(now, 18, 0, 0, 0);
 
-            var breakfast_af = changeTime(now, 7, 20, 0, 0);
-            var lunch_af = changeTime(now, 12, 40, 0, 0);
-            var dinner_af = changeTime(now, 18, 20, 0, 0);
+            var breakfast_af = Tools.ChangeTime(now, 7, 20, 0, 0);
+            var lunch_af = Tools.ChangeTime(now, 12, 40, 0, 0);
+            var dinner_af = Tools.ChangeTime(now, 18, 20, 0, 0);
 
             if ((now >= breakfast && now <= breakfast_af) || (now >= lunch && now <= lunch_af) || (now >= dinner && now <= dinner_af))
             {
-                this.timeText.Content = "배식시간임;;; 빨리 먹으러 가셈;;;";
+                this.timeText.Content = "배식 시간 입니다";
             }
             else
             {
                 if (now < breakfast)
                 {
-                    end = changeTime(now, 7, 0, 0, 0);
+                    end = Tools.ChangeTime(now, 7, 0, 0, 0);
                 }
                 else if (now < lunch)
                 {
-                    end = changeTime(now, 12, 20, 0, 0);
+                    end = Tools.ChangeTime(now, 12, 20, 0, 0);
                 }
                 else if (now < dinner)
                 {
-                    end = changeTime(now, 18, 0, 0, 0);
+                    end = Tools.ChangeTime(now, 18, 0, 0, 0);
                 }
                 else
                 {
@@ -191,8 +156,6 @@ namespace OSO
                     this.timeText.Content = "배식까지 남은 시간 : " + h + "시간 " + m + "분 " + s + "초";
                 }
             }
-
-
 
         }
 
@@ -262,40 +225,58 @@ namespace OSO
             SetWindowPos(hWnd, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
         }
 
-
-        private void Button_Click_end(object sender, RoutedEventArgs e)
+        private async void updateButton_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.MessageBox.Show("들어오는건 니맘이지만 나가는건 아니라네.. 껄껄껄");
+            stDate = DateTime.Now;
+            try
+            {
+                await getMeal(stDate);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("프로그램에 일시적 오류가 발생하였습니다. 문제가 반복되면 보고하십시오.");
+            };
         }
 
-        private void Button_Click_f(object sender, RoutedEventArgs e)
+        private void selectDate_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.MessageBox.Show("허허.. 젊은이, 그런게 있다고 생각했단 말인가?");
+
         }
 
-        private async void Button_Click_refresh(object sender, RoutedEventArgs e)
-        {
-            var t = getMeal();
-            t.Wait();
-            int x = t.Result;
-            if (x == 0) System.Windows.MessageBox.Show("급식충;;;");
-            else System.Windows.MessageBox.Show("프로그램 맛감");
-        }
-
-        private async void Button_Click_tommorow(object sender, RoutedEventArgs e)
-        {
-            var d = DateTime.Now;
-            d = d.AddDays(1);
-            var t = getMeal(d.Year, d.Month, d.Day);
-            t.Wait();
-            int x = t.Result;
-            if (x == 0) System.Windows.MessageBox.Show("내일 급식인데? 오늘 못먹는데?");
-            else System.Windows.MessageBox.Show("모르는게 약이여~ ㅉㅉ");
-        }
-
-        private void Button_Click_maker(object sender, RoutedEventArgs e)
+        private void programInformation_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.MessageBox.Show("26기 남정연, 이융희, 이현겸, 신원영");
+        }
+
+        private void checkForUpdates_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private async void nextDay_Click(object sender, RoutedEventArgs e)
+        {
+            stDate = stDate.AddDays(1);
+            try
+            {
+                await getMeal(stDate);
+            } catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("프로그램에 일시적 오류가 발생하였습니다. 문제가 반복되면 보고하십시오.");
+            }
+            
+        }
+
+        private async void beforeDay_Click(object sender, RoutedEventArgs e)
+        {
+            stDate = stDate.AddDays(-1);
+            try
+            {
+                await getMeal(stDate);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("프로그램에 일시적 오류가 발생하였습니다. 문제가 반복되면 보고하십시오.");
+            }
         }
 
         private void adjustTransparency_Click(object sender, RoutedEventArgs e)
@@ -303,6 +284,11 @@ namespace OSO
             var transparencyAdjustDialog = new TransparencyAdjustDialog();
             transparencyAdjustDialog.Owner = Window.GetWindow(this);
             transparencyAdjustDialog.Show();
+        }
+
+        private void exitButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Properties\Tools.cs" />
     <Compile Include="TransparencyAdjustDialog.xaml.cs">
       <DependentUpon>TransparencyAdjustDialog.xaml</DependentUpon>
     </Compile>
