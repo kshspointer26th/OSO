@@ -17,7 +17,7 @@
             <RowDefinition Height="0*"/>
         </Grid.RowDefinitions>
 
-        <Grid x:Name="StatusWrapper" Panel.ZIndex="1" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="500" MouseDown="Window_MouseDown">
+        <Grid x:Name="StatusWrapper" Panel.ZIndex="1" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="500" MouseDown="Window_MouseDown" Background="Transparent">
             <Label x:Name="dateText" Content="[2019년 1월 18일 급식표 표시중]" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="216"/>
             <TextBlock x:Name="beforeDay" Text="&lt; 이전날" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="84" Height="16"/>
             <Label x:Name="timeText" Content="배식까지 남은 시간 : 12시간 32분 21초 " HorizontalAlignment="Left" Margin="231,10,0,0" VerticalAlignment="Top" Width="259" HorizontalContentAlignment="Right" />

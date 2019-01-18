@@ -22,8 +22,6 @@ namespace OSO
     /// </summary>
     public partial class MainWindow : Window
     {
-        bool isWrapped = false;
-
         int day;
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
