@@ -1,7 +1,11 @@
 ﻿using OSO.Properties;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -261,9 +265,28 @@ namespace OSO
                "기타 보조 : 신원영", "OSO Credit", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void checkForUpdates_Click(object sender, RoutedEventArgs e)
+        private async void checkForUpdates_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.MessageBox.Show("이 기능은 아직 지원하지 않습니다.");
+            try
+            {
+                string onlineVersion = Tools.getOnlineVersion();
+                string localVersion = "v" + Tools.getLocalVersion();
+
+                if (onlineVersion != localVersion)
+                {
+                    if (MessageBox.Show(String.Format("최신버전 : {0}{1}현재버전 : {2}{3}새 버전이 출시되었습니다. 업데이트하시겠습니까?", onlineVersion, Environment.NewLine, localVersion, Environment.NewLine), "업데이트 확인", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
+                    {
+                        System.Diagnostics.Process.Start("https://github.com/kshspointer26th/OSO/releases/latest");
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(String.Format("현재 버전 : {0}{1}최신버전입니다.", localVersion, Environment.NewLine), "업데이트 확인", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            } catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show("업데이트 확인 중 오류가 발생하였습니다. 문제가 반복되면 보고하십시오.");
+            }
         }
 
         private async void nextDay_Click(object sender, RoutedEventArgs e)
