@@ -6,7 +6,9 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Automation.Peers;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -225,7 +227,7 @@ namespace OSO
             SetWindowPos(hWnd, HWND_BOTTOM, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
         }
 
-        private async void updateButton_Click(object sender, RoutedEventArgs e)
+        private async void todayButton_Click(object sender, RoutedEventArgs e)
         {
             stDate = DateTime.Now;
             try
@@ -240,7 +242,7 @@ namespace OSO
 
         private void selectDate_Click(object sender, RoutedEventArgs e)
         {
-
+            this.pickDate.RaiseEvent(new RoutedEventArgs(ButtonBase.ClickEvent));
         }
 
         private void programInformation_Click(object sender, RoutedEventArgs e)

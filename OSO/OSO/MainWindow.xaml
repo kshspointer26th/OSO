@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OSO"
         mc:Ignorable="d"
-        Title="OSO" Topmost="False"  ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None" Height="644" Width="500"
+        Title="OSO" Topmost="False"  ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None" Height="638" Width="500"
         WindowStartupLocation="Manual" 
         ResizeMode="NoResize"
         Top="0"
@@ -18,22 +18,23 @@
             <RowDefinition Height="0*"/>
         </Grid.RowDefinitions>
 
-        <Grid x:Name="StatusWrapper" Panel.ZIndex="1" HorizontalAlignment="Left" Height="100" VerticalAlignment="Top" Width="500" MouseDown="Window_MouseDown" Background="White">
-            <Label x:Name="dateText" Content="[2019년 1월 18일 급식표 표시중]" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="216"/>
+        <Grid x:Name="StatusWrapper" Panel.ZIndex="1" HorizontalAlignment="Left" Height="95" VerticalAlignment="Top" Width="500" MouseDown="Window_MouseDown" Background="White">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Label x:Name="dateText" Content="[2019년 1월 18일 급식표 표시중]" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="216" Height="26"/>
             <Button x:Name="beforeDay" Content="&lt; 이전날" Click="beforeDay_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="52" Height="16"/>
-            <Label x:Name="timeText" Content="배식까지 남은 시간 : 12시간 32분 21초 " HorizontalAlignment="Left" Margin="231,10,0,0" VerticalAlignment="Top" Width="259" HorizontalContentAlignment="Right" />
-            <Button Panel.ZIndex="2" x:Name="nextDay" Content="다음날 &gt;" Click="nextDay_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Margin="442,41,0,0" VerticalAlignment="Top" Width="48"/>
+            <Label x:Name="timeText" Content="배식까지 남은 시간 : 12시간 32분 21초 " HorizontalAlignment="Left" Margin="231,10,0,0" VerticalAlignment="Top" Width="259" HorizontalContentAlignment="Right" Grid.ColumnSpan="2" Height="26" />
+            <Button Panel.ZIndex="2" x:Name="nextDay" Content="다음날 &gt;" Click="nextDay_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Margin="192,41,0,0" VerticalAlignment="Top" Width="48" Grid.Column="1" Height="18"/>
             <Button Panel.ZIndex="2" x:Name="adjustTransparency" Content="투명도 조절" Background="Transparent" BorderThickness="0" Click="adjustTransparency_Click" HorizontalAlignment="Left" Margin="10,66,0,0" VerticalAlignment="Top" Width="67" Height="19"/>
             <Button Panel.ZIndex="2" x:Name="checkForUpdates" Click="checkForUpdates_Click" Content="업데이트 확인" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Margin="82,66,0,0" VerticalAlignment="Top" Width="77" Height="19" RenderTransformOrigin="0.537,1.221"/>
             <Button Panel.ZIndex="2" x:Name="programInformation" Click="programInformation_Click" Content="프로그램 정보" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Margin="164,66,0,0" VerticalAlignment="Top" Width="77" Height="19"/>
-            <Button Panel.ZIndex="2" x:Name="exitButton" Content="프로그램 종료" Click="exitButton_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Margin="413,66,0,0" VerticalAlignment="Top" Width="77" Height="19"/>
-            <Grid Margin="190,41" HorizontalAlignment="Center">
-                <Button Panel.ZIndex="2" x:Name="selectDate" Click="selectDate_Click" Content="날짜선택" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" VerticalAlignment="Top" Width="54"/>
-                <Button Panel.ZIndex="2" x:Name="updateButton" Click="updateButton_Click"  Content="새로고침" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Margin="66,0,0,0" VerticalAlignment="Top" Width="54"/>
-            </Grid>
+            <Button Panel.ZIndex="2" x:Name="exitButton" Content="프로그램 종료" Click="exitButton_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Margin="162,66,0,0" VerticalAlignment="Top" Width="78" Height="19" Grid.Column="1"/>
+            <Button Panel.ZIndex="2" x:Name="updateButton" Click="todayButton_Click"  Content="오늘" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Margin="224,41,0,0" VerticalAlignment="Top" Width="54" Height="16" Grid.ColumnSpan="2"/>
         </Grid>
 
-        <Grid x:Name="wrapper" Opacity="0.7" Background="white" Height="544" VerticalAlignment="Top" Margin="0,100,0,0" IsHitTestVisible="False">
+        <Grid x:Name="wrapper" Opacity="0.7" Background="white" Height="544" VerticalAlignment="Top" Margin="0,95,0,0" IsHitTestVisible="False">
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*"/>
                 <RowDefinition Height="587*"/>
