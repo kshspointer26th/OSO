@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OSO"
         mc:Ignorable="d"
-        Title="OSO" Topmost="False"  ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None" Height="638" Width="500"
+        Title="OSO" Topmost="False"  ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None" Height="545.164" Width="500"
         WindowStartupLocation="Manual" 
         ResizeMode="NoResize"
         Top="0"
@@ -24,9 +24,9 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Label x:Name="dateText" Content="[2019년 1월 18일 급식표 표시중]" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="216" Height="26"/>
+            <Label x:Name="dateText" Content="표시멘트" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="216" Height="26"/>
             <Button x:Name="beforeDay" Content="&lt; 이전날" Click="beforeDay_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Margin="10,41,0,0" VerticalAlignment="Top" Width="52" Height="16"/>
-            <Label x:Name="timeText" Content="배식까지 남은 시간 : 12시간 32분 21초 " HorizontalAlignment="Left" Margin="231,10,0,0" VerticalAlignment="Top" Width="259" HorizontalContentAlignment="Right" Grid.ColumnSpan="2" Height="26" />
+            <Label x:Name="timeText" Content="남은시간" HorizontalAlignment="Left" Margin="231,10,0,0" VerticalAlignment="Top" Width="259" HorizontalContentAlignment="Right" Grid.ColumnSpan="2" Height="26" />
             <Button Panel.ZIndex="2" x:Name="nextDay" Content="다음날 &gt;" Click="nextDay_Click" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Margin="192,41,0,0" VerticalAlignment="Top" Width="48" Grid.Column="1" Height="18"/>
             <Button Panel.ZIndex="2" x:Name="adjustTransparency" Content="투명도 조절" Background="Transparent" BorderThickness="0" Click="adjustTransparency_Click" HorizontalAlignment="Left" Margin="10,66,0,0" VerticalAlignment="Top" Width="67" Height="19"/>
             <Button Panel.ZIndex="2" x:Name="checkForUpdates" Click="checkForUpdates_Click" Content="업데이트 확인" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Margin="82,66,0,0" VerticalAlignment="Top" Width="77" Height="19" RenderTransformOrigin="0.537,1.221"/>
@@ -35,7 +35,7 @@
             <Button Panel.ZIndex="2" x:Name="updateButton" Click="todayButton_Click"  Content="오늘" Background="Transparent" BorderThickness="0" HorizontalAlignment="Left" Margin="224,41,0,0" VerticalAlignment="Top" Width="54" Height="16" Grid.ColumnSpan="2"/>
         </Grid>
 
-        <Grid x:Name="wrapper" Opacity="0.7" Background="white" Height="544" VerticalAlignment="Top" Margin="0,95,0,0" IsHitTestVisible="False">
+        <Grid x:Name="wrapper" Opacity="1" Background="white" Margin="0,95,0,-1" Grid.RowSpan="2" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*"/>
                 <RowDefinition Height="587*"/>
@@ -45,7 +45,27 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <ListView x:Name="mealList" Background="Transparent"  BorderThickness="0" Grid.ColumnSpan="2" Grid.RowSpan="2" />
+            <ListView x:Name="mealList" Background="Transparent"  BorderThickness="0" Grid.ColumnSpan="2" Grid.RowSpan="2" IsEnabled="True" Margin="10,0,10,10">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                    <Border x:Name="RootBorder">
+                                        <ContentPresenter/>
+                                    </Border>
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="False">
+                                            <Setter TargetName="RootBorder" Property="BorderBrush" Value="Transparent"/>
+                                            <Setter TargetName="RootBorder" Property="BorderThickness" Value="0"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListView.ItemContainerStyle>
+            </ListView>
         </Grid>
     </Grid>
 </Window>

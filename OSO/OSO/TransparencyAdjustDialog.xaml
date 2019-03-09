@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:OSO"
         mc:Ignorable="d"
-        Title="투명도 조절" Height="122" Width="296" Closed="Window_Closed" ResizeMode="NoResize">
-    <Grid Margin="0,0,2,1">
-        <Slider x:Name="transparencySlider" ValueChanged="transparencySlider_ValueChanged" Thumb.DragCompleted="transparencySlider_DragCompleted" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Width="269" Maximum="100"/>
-        <Label Content="10" HorizontalAlignment="Left" Margin="10,33,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.263,-0.077"/>
+        Title="투명도 조절" Height="122" Width="254" Closed="Window_Closed" ResizeMode="NoResize">
+    <Grid Margin="0,0,4,1">
+        <Slider x:Name="transparencySlider" ValueChanged="transparencySlider_ValueChanged" Thumb.DragCompleted="transparencySlider_DragCompleted" Margin="10,10,9,0" VerticalAlignment="Top" Maximum="100"/>
+        <Label Content="0" HorizontalAlignment="Left" Margin="10,33,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.263,-0.077"/>
         <Label Content="100" HorizontalAlignment="Right" Margin="0,28,10,0" VerticalAlignment="Top" RenderTransformOrigin="0.263,-0.077"/>
-        <Button x:Name="setTransparencyButton" Click="setTransparency_Click" Content="투명도 값 (으)로 설정" HorizontalAlignment="Left" Margin="10,60,0,0" VerticalAlignment="Top" Width="266"/>
+        <Button x:Name="setTransparencyButton" Click="setTransparency_Click" Content="투명도 값 (으)로 설정" Margin="10,60,12,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>

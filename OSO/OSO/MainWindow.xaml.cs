@@ -112,8 +112,6 @@ namespace OSO
         {
             InitializeComponent();
 
-            
-
             string[] args = Environment.GetCommandLineArgs();
             Dictionary<string, string> dic = new Dictionary<string, string>();
             for (int index = 1; index < args.Length; index += 2)
@@ -142,6 +140,7 @@ namespace OSO
 
             try
             {
+                mealList.Items.Add("급식 로딩중..");
                 getMeal(stDate);
             }
             catch (Exception ex)
@@ -150,25 +149,66 @@ namespace OSO
             }
         }
 
+        private string GetDay(DateTime dt)
+        {
+            string strDay = "";
+
+            switch (dt.DayOfWeek)
+            {
+                case DayOfWeek.Monday:
+                    strDay = "월";
+                    break;
+                case DayOfWeek.Tuesday:
+                    strDay = "화";
+                    break;
+                case DayOfWeek.Wednesday:
+                    strDay = "수";
+                    break;
+                case DayOfWeek.Thursday:
+                    strDay = "목";
+                    break;
+                case DayOfWeek.Friday:
+                    strDay = "금";
+                    break;
+                case DayOfWeek.Saturday:
+                    strDay = "토";
+                    break;
+                case DayOfWeek.Sunday:
+                    strDay = "일";
+                    break;
+            }
+
+            return strDay;
+        }
+
         private async Task getMeal(DateTime dateTime)
         {
             int y = dateTime.Year;
             int m = dateTime.Month;
             int d = dateTime.Day;
-            this.dateText.Content = String.Format("[{0}년 {1}월 {2}일 급식표 표시중]", y, m, d);
+            string ddate = GetDay(dateTime);
+
+            this.dateText.Content = $"[{y}년 {m}월 {d}일 {ddate}요일 급식표]";
             this.mealList.Items.Clear();
+
+            mealList.Items.Add("급식 로딩중..");
+
             string result = await mealAPI.MealAPI.getMealOfDay(y, m, d);
             if (result == String.Empty)
             {
-                //throw new NoInfoException();
+                mealList.Items.Clear();
                 mealList.Items.Add("급식 정보가 없습니다");
                 return;
             }
             string[] aa = result.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
             bool xx = false;
+
             aa = Tools.RemoveIndex(aa, 0);
-            aa = Tools.RemoveIndex(aa, 1);
-            aa = Tools.RemoveIndex(aa, 2);
+            aa = Tools.RemoveIndex(aa, 0);
+
+            mealList.Items.Clear();
+
+
             foreach (string a in aa)
             {
                 if (a.Contains("[") && xx)
