@@ -9,6 +9,7 @@
         WindowStartupLocation="Manual" 
         ResizeMode="NoResize"
         Top="0"
+        
         Background="Transparent"
         Loaded="Window_Loaded">
     <Grid
@@ -44,7 +45,7 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <ListView x:Name="mealList" Background="Transparent" BorderThickness="0" Grid.ColumnSpan="2" Grid.RowSpan="2" />
+            <ListView x:Name="mealList" Background="Transparent"  BorderThickness="0" Grid.ColumnSpan="2" Grid.RowSpan="2" />
         </Grid>
     </Grid>
 </Window>

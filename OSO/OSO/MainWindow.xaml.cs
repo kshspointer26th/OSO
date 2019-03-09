@@ -34,15 +34,102 @@ namespace OSO
 
         class NoInfoException : Exception { }
 
+        #region Window styles
+        [Flags]
+        public enum ExtendedWindowStyles
+        {
+            // ...
+            WS_EX_TOOLWINDOW = 0x00000080,
+            // ...
+        }
+
+        public enum GetWindowLongFields
+        {
+            // ...
+            GWL_EXSTYLE = (-20),
+            // ...
+        }
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetWindowLong(IntPtr hWnd, int nIndex);
+
+        public static IntPtr SetWindowLong(IntPtr hWnd, int nIndex, IntPtr dwNewLong)
+        {
+            int error = 0;
+            IntPtr result = IntPtr.Zero;
+            // Win32 SetWindowLong doesn't clear error on success
+            SetLastError(0);
+
+            if (IntPtr.Size == 4)
+            {
+                // use SetWindowLong
+                Int32 tempResult = IntSetWindowLong(hWnd, nIndex, IntPtrToInt32(dwNewLong));
+                error = Marshal.GetLastWin32Error();
+                result = new IntPtr(tempResult);
+            }
+            else
+            {
+                // use SetWindowLongPtr
+                result = IntSetWindowLongPtr(hWnd, nIndex, dwNewLong);
+                error = Marshal.GetLastWin32Error();
+            }
+
+            if ((result == IntPtr.Zero) && (error != 0))
+            {
+                throw new System.ComponentModel.Win32Exception(error);
+            }
+
+            return result;
+        }
+
+        [DllImport("user32.dll", EntryPoint = "SetWindowLongPtr", SetLastError = true)]
+        private static extern IntPtr IntSetWindowLongPtr(IntPtr hWnd, int nIndex, IntPtr dwNewLong);
+
+        [DllImport("user32.dll", EntryPoint = "SetWindowLong", SetLastError = true)]
+        private static extern Int32 IntSetWindowLong(IntPtr hWnd, int nIndex, Int32 dwNewLong);
+
+        private static int IntPtrToInt32(IntPtr intPtr)
+        {
+            return unchecked((int)intPtr.ToInt64());
+        }
+
+        [DllImport("kernel32.dll", EntryPoint = "SetLastError")]
+        public static extern void SetLastError(int dwErrorCode);
+        #endregion
+
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            WindowInteropHelper wndHelper = new WindowInteropHelper(this);
 
+            int exStyle = (int)GetWindowLong(wndHelper.Handle, (int)GetWindowLongFields.GWL_EXSTYLE);
+
+            exStyle |= (int)ExtendedWindowStyles.WS_EX_TOOLWINDOW;
+            SetWindowLong(wndHelper.Handle, (int)GetWindowLongFields.GWL_EXSTYLE, (IntPtr)exStyle);
         }
 
         public MainWindow()
         {
             InitializeComponent();
+
+            
+
+            string[] args = Environment.GetCommandLineArgs();
+            Dictionary<string, string> dic = new Dictionary<string, string>();
+            for (int index = 1; index < args.Length; index += 2)
+            {
+                dic.Add(args[index], args[index + 1]);
+            }
+            if (dic.ContainsKey("-oldfile"))
+            {
+                string path = dic["-oldfile"];
+                System.IO.File.Delete(path);
+            }
             SendWpfWindowBack(this);
+            UpdateCheck(false);
+
+
+            
             this.Left = SystemParameters.PrimaryScreenWidth - this.Width;
             setTimeText();
 
@@ -70,10 +157,12 @@ namespace OSO
             int d = dateTime.Day;
             this.dateText.Content = String.Format("[{0}년 {1}월 {2}일 급식표 표시중]", y, m, d);
             this.mealList.Items.Clear();
-            string result = mealAPI.getMealOfDay(y, m, d);
+            string result = await mealAPI.MealAPI.getMealOfDay(y, m, d);
             if (result == String.Empty)
             {
-                throw new NoInfoException();
+                //throw new NoInfoException();
+                mealList.Items.Add("급식 정보가 없습니다");
+                return;
             }
             string[] aa = result.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
             bool xx = false;
@@ -267,23 +356,30 @@ namespace OSO
 
         private async void checkForUpdates_Click(object sender, RoutedEventArgs e)
         {
+            await UpdateCheck(true);
+        }
+
+        private async Task UpdateCheck(bool b)
+        {
             try
             {
-                string onlineVersion = Tools.getOnlineVersion();
+                string onlineVersion = await Tools.getOnlineVersion();
                 string localVersion = "v" + Tools.getLocalVersion();
 
                 if (onlineVersion != localVersion)
                 {
                     if (MessageBox.Show(String.Format("최신버전 : {0}{1}현재버전 : {2}{3}새 버전이 출시되었습니다. 업데이트하시겠습니까?", onlineVersion, Environment.NewLine, localVersion, Environment.NewLine), "업데이트 확인", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes)
                     {
-                        System.Diagnostics.Process.Start("https://github.com/kshspointer26th/OSO/releases/latest");
+                        await Tools.UpdateProcess(onlineVersion);
                     }
                 }
                 else
                 {
-                    MessageBox.Show(String.Format("현재 버전 : {0}{1}최신버전입니다.", localVersion, Environment.NewLine), "업데이트 확인", MessageBoxButton.OK, MessageBoxImage.Information);
+                    if(b)
+                        MessageBox.Show(String.Format("현재 버전 : {0}{1}최신버전입니다.", localVersion, Environment.NewLine), "업데이트 확인", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 System.Windows.MessageBox.Show("업데이트 확인 중 오류가 발생하였습니다. 문제가 반복되면 보고하십시오.");
             }
